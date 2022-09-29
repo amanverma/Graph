@@ -141,7 +141,7 @@ class Union{
         3. Connected - O log n
         4. Union Constructor - O (n)
 
-        In the wors case scenario, in Find operation , when we repeatedly union
+        In the worst case scenario, in Find operation , when we repeatedly union
         components of equal rank, the tree height will be at most log(N) + 1, so the
         find operation requires O(logN) time.
 
