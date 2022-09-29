@@ -6,33 +6,56 @@ import java.util.stream.IntStream;
 public class LargestIsland {
     //At each point where we encounter 0, make it 1 and compute size of largest island so far.
     public static int largestIsland(int[][] grid) {
-        Union3 u3 = new Union3(grid.length);
-        int max_so_far = 0;
-        HashMap<Integer, Integer> map = new HashMap<>();
+        int nr = grid.length;
+        int nc = grid[0].length;
+        Union3 u3 = new Union3(nr*nc);
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
-                if (grid[i][j] == 0) {
-                    grid[i][j] = 1;
-                    //fire the algo for UDJS to compute largest island
-                    for (int k = 0; k < grid.length; k++) {
-                        int[] rel = grid[k];
-                        if (rel[0] != rel[1]) {
-                            u3.union(rel[0], rel[1]);
-                        }
+                if (grid[i][j] == 1) {
+                    if (i + 1 < nr && grid[i + 1][j] == 1) {
+                        u3.union(i * nc + j, (i + 1) * nc + j);
                     }
-                    grid[i][j] = 0;
-                    u3.buildMapForCurrentGrid(map);
-                    for(int v: map.values()){
-                        max_so_far = Math.max(max_so_far,v);
+
+                    if (i - 1 >= 0 && grid[i - 1][j] == 1) {
+                        u3.union(i * nc + j, (i - 1) * nc + j);
                     }
-                    map.clear();
+
+                    if (j + 1 < nc && grid[i][j + 1] == 1) {
+                        u3.union(i * nc + j, (i) * nc + (j + 1));
+                    }
+
+                    if (j - 1 >= 0 && grid[i][j - 1] == 1) {
+                        u3.union(i * nc + j, (i) * nc + (j - 1));
+                    }
+                }}}
+        System.out.println("the number of islands in initial grid:  "+ u3.getNumberOfComponents());
+
+        HashMap<Integer, Integer> map1 = new HashMap<>();
+        u3.buildMapForCurrentGrid(map1);
+        int largest_island_size = 0 ;
+        for(int i = 0 ; i < grid.length; i++){
+            for(int j = 0 ; j < grid[0].length; j++){
+                int sum = 0;
+                if(grid[i][j]==0){
+                    if(i+1<nr){
+                        sum+= u3.getCountFromMap((i+1)*nc+j, map1);
+                    }
+                    if(i-1>=0){
+                        sum+= u3.getCountFromMap((i-1)*nc+j, map1);
+                    }
+                    if(j+1<nc){
+                        sum+= u3.getCountFromMap((i)*nc+(j+1), map1);
+                    }
+                    if(j-1>=0){
+                        sum+= u3.getCountFromMap((i)*nc+(j-1), map1);
+                    }
+                    sum+=1;
+
+                    largest_island_size = Math.max(largest_island_size, sum);
                 }
             }
         }
-        for(int v: map.values()){
-            max_so_far = Math.max(max_so_far,v);
-        }
-        return max_so_far;
+        return largest_island_size;
     }
 
     public static void main(String[] args) {
@@ -51,6 +74,15 @@ class Union3 {
     int[] rank;
 
     int count;
+
+    public void reset(int n) {
+        count = n;
+        for (int i = 0; i < n; i++) {
+            root[i] = i;
+            rank[i] = 1;
+
+        }
+    }
 
     public Union3(int n) {
         root = new int[n];
@@ -91,6 +123,19 @@ class Union3 {
         return find(x) == find(y);
     }
 
+    public int getNumberOfComponents(){
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int i = 0 ; i <root.length; i++) {
+            int key = find(i);
+            if (map.get(key) == null) {
+                map.put(key, 1);
+            } else {
+                map.put(key, map.get(key) + 1);
+            }
+        }
+        return (map.size()>0)?map.keySet().size():0;
+    }
+
     public void buildMapForCurrentGrid(Map<Integer, Integer> map) {
         for(int i = 0 ; i <root.length; i++) {
             int key = find(i);
@@ -111,5 +156,12 @@ class Union3 {
                 map.put(key, map.get(key)+1);
             }
         }
+    }
+
+    public int getCountFromMap(int value, Map<Integer, Integer> map) {
+        if(map.size()>0 && map.keySet().contains(find(value))){
+            return (map.get(value)!=null)?map.get(value):0;
+        }
+        return 0;
     }
 }
