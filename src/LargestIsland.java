@@ -124,25 +124,25 @@ class Union3 {
     }
 
     public int getNumberOfComponents(){
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for(int i = 0 ; i <root.length; i++) {
+        HashSet<Integer> set = new HashSet<>();
+        for(int i = 0 ; i < root.length; i++){
             int key = find(i);
-            if (map.get(key) == null) {
-                map.put(key, 1);
-            } else {
-                map.put(key, map.get(key) + 1);
+            if(i!=key){
+                set.add(key);
             }
         }
-        return (map.size()>0)?map.keySet().size():0;
+        return set.size();
     }
 
     public void buildMapForCurrentGrid(Map<Integer, Integer> map) {
         for(int i = 0 ; i <root.length; i++) {
             int key = find(i);
-            if (map.get(key) == null) {
-                map.put(key, 1);
-            } else {
-                map.put(key, map.get(key) + 1);
+            if(i!=key){
+                if (map.get(key) == null) {
+                    map.put(key, 1);
+                } else {
+                    map.put(key, map.get(key) + 1);
+                }
             }
         }
     }
