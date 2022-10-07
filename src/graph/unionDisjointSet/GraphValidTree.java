@@ -1,3 +1,5 @@
+package graph.unionDisjointSet;
+
 public class GraphValidTree {
     public boolean validTree(int n, int[][] edges) {
         Union2 u2 = new Union2(n);

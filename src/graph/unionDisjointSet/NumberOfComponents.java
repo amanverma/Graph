@@ -1,3 +1,4 @@
+package graph.unionDisjointSet;
 
 class NumberOfComponents {
     public static int countComponents(int n, int[][] edges) {
