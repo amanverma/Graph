@@ -8,6 +8,8 @@ import java.util.Queue;
 public class CloneGraph {
     private HashMap<Node, Node> map = new HashMap<>();
     public Node cloneGraphDFS(Node node) {
+
+        if(node==null) return null;
         if(map.containsKey(node)){
             return map.get(node);
         }
