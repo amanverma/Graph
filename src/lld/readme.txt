@@ -14,6 +14,9 @@ Other
 6. ingestion framework design
 7. notification service design
 8. cab booking service lld
+9. bike rental service lld
+10. lld stock exchange
+
 
 solid design principles
 
