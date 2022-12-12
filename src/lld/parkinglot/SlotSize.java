@@ -14,6 +14,7 @@ public enum SlotSize {
     MEDIUM(asList(BIKE, COMPACT, SEDAN)),
     LARGE(asList(BIKE, COMPACT, SEDAN, TRUCK));
 
+
     private final List<VehicleType> vehicleTypesAllowed;
 
     SlotSize(List<VehicleType> vehicleTypes) {
